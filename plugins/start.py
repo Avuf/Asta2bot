@@ -41,6 +41,17 @@ async def start_command(client: Client, message: Message):
             buttons = [
                 [InlineKeyboardButton("Join Channel", url= await get_invite_link(client, channel))] for channel in non_member_channels
             ]
+            try:
+                buttons.append(
+                    [
+                        InlineKeyboardButton(
+                            text = 'Try Again',
+                            url = f"https://t.me/{client.username}?start={message.command[1]}"
+                        )
+                    ]
+                )
+            except IndexError:
+                pass
             await m.edit(
                 message_text,
                 reply_markup=InlineKeyboardMarkup(buttons) if buttons else None,
