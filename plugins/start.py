@@ -9,7 +9,7 @@ from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
 
 from bot import Bot
 from config import ADMINS, FORCE_MSG, START_MSG, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON, PROTECT_CONTENT
-from helper_func import encode, decode, get_messages, user_is_member
+from helper_func import encode, decode, get_messages, is_user_joined
 from database.database import add_user, del_user, full_userbase, present_user
 
 
@@ -34,7 +34,7 @@ async def start_command(client: Client, message: Message):
             pass
     text = message.text
     if len(text)>7:
-        non_member_channels = [channel for channel in CHANNELS if not user_is_member(client, id, int(channel))]
+        non_member_channels = [channel for channel in CHANNELS if not is_user_joined(client, id, int(channel))]
         if non_member_channels:
             message_text = "To use this bot, please join the following channels:"
             buttons = [
