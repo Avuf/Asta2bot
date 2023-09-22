@@ -9,10 +9,19 @@ from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
 
 from bot import Bot
 from config import ADMINS, FORCE_MSG, START_MSG, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON, PROTECT_CONTENT
-from helper_func import subscribed, encode, decode, get_messages
+from helper_func import subscribed, encode, decode, get_messages, user_is_member
 from database.database import add_user, del_user, full_userbase, present_user
 
 
+CHANNELS = ["", "", "", ""]
+
+
+async def get_invite_link(client, channel):
+    try:
+        link = await client.create_chat_invite_link(int(channel))
+        return link.invite_link
+    except Exception as e:
+        return f"https://t.me/{channel}" 
 
 
 @Bot.on_message(filters.command('start') & filters.private)
@@ -25,6 +34,17 @@ async def start_command(client: Client, message: Message):
             pass
     text = message.text
     if len(text)>7:
+        non_member_channels = [channel for channel in CHANNELS if not user_is_member(client, id, int(channel))]
+        if non_member_channels:
+            message_text = "To use this bot, please join the following channels:"
+            buttons = [
+                [InlineKeyboardButton("Join Channel", url=get_invite_link(channel))] for channel in non_member_channels
+            ]
+            await message.reply_text(
+                message_text,
+                reply_markup=InlineKeyboardMarkup(buttons) if buttons else None,
+            )
+            return
         try:
             base64_string = text.split(" ", 1)[1]
         except:
