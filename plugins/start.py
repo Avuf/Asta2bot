@@ -18,10 +18,14 @@ CHANNELS = ["-1001581740478", "-1001886813820", "-1001921469908", "-100193874835
 
 async def get_invite_link(client, channel):
     try:
-        link = await client.create_chat_invite_link(int(channel))
-        return link.invite_link
+        chat_info = await client.get_chat(int(channel))
+        if chat_info.invite_link:
+            return chat_info.invite_link
+        else:
+            link = await client.create_chat_invite_link(int(channel))
+            return link.invite_link
     except Exception as e:
-        return f"https://t.me/{channel}" 
+        return f"https://t.me/{channel}"
 
 
 @Bot.on_message(filters.command('start') & filters.private)
