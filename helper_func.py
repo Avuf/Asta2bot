@@ -10,7 +10,7 @@ from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant
 from pyrogram.errors import FloodWait
 
 
-async def is_user_joined(bot, user_id, channel)
+async def is_user_joined(bot, user_id, channel):
     if user_id in ADMINS:
         return True
     try:
