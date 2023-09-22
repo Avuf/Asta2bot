@@ -34,11 +34,11 @@ async def start_command(client: Client, message: Message):
             pass
     text = message.text
     if len(text)>7:
-        non_member_channels = [channel for channel in CHANNELS if not is_user_joined(client, id, int(channel))]
+        non_member_channels = [channel for channel in CHANNELS if not await is_user_joined(client, id, int(channel))]
         if non_member_channels:
             message_text = "To use this bot, please join the following channels:"
             buttons = [
-                [InlineKeyboardButton("Join Channel", url=get_invite_link(client, channel))] for channel in non_member_channels
+                [InlineKeyboardButton("Join Channel", url= await get_invite_link(client, channel))] for channel in non_member_channels
             ]
             await message.reply_text(
                 message_text,
