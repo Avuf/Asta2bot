@@ -1,8 +1,5 @@
 #(©)CodeXBotz
-
-
-
-
+#(©)VysakhTG created multi forcesub feature
 import os
 import asyncio
 from pyrogram import Client, filters, __version__
@@ -18,7 +15,7 @@ from database.database import add_user, del_user, full_userbase, present_user
 
 
 
-@Bot.on_message(filters.command('start') & filters.private & subscribed)
+@Bot.on_message(filters.command('start') & filters.private)
 async def start_command(client: Client, message: Message):
     id = message.from_user.id
     if not await present_user(id):
@@ -117,41 +114,6 @@ REPLY_ERROR = """<code>Use this command as a replay to any telegram message with
 #=====================================================================================##
 
     
-    
-@Bot.on_message(filters.command('start') & filters.private)
-async def not_joined(client: Client, message: Message):
-    buttons = [[
-        InlineKeyboardButton( '𝕁𝕠𝕚𝕟 ℂ𝕙𝕒𝕟𝕟𝕖𝕝 1', url=f'https://t.me/The_quintessential_quintuplets_M')
-       
-    ],[
-        InlineKeyboardButton( '𝕁𝕠𝕚𝕟 ℂ𝕙𝕒𝕟𝕟𝕖𝕝 2', url= client.invitelink)        
-        
-    ]]   
-    try:
-        buttons.append(
-            [
-                InlineKeyboardButton(
-                    text = 'Try Again',
-                    url = f"https://t.me/{client.username}?start={message.command[1]}"
-                )
-            ]
-        )
-    except IndexError:
-        pass
-
-    await message.reply(
-        text = FORCE_MSG.format(
-                first = message.from_user.first_name,
-                last = message.from_user.last_name,
-                username = None if not message.from_user.username else '@' + message.from_user.username,
-                mention = message.from_user.mention,
-                id = message.from_user.id
-            ),
-        reply_markup = InlineKeyboardMarkup(buttons),
-        quote = True,
-        disable_web_page_preview = True
-    )
-
 @Bot.on_message(filters.command('users') & filters.private & filters.user(ADMINS))
 async def get_users(client: Bot, message: Message):
     msg = await client.send_message(chat_id=message.chat.id, text=WAIT_MSG)
